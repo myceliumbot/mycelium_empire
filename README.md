@@ -1,2 +1,1 @@
-# mycelium_empire
- A city simulation game with a mushroom theme
+#myceliumempire In a post-human world reclaimed by fungi, you are the mind of a growing mycelium empire. Build bio-structures, mutate powerful mushroom strains, and battle rival colonies to dominate the underground. Strategy meets survival in this psychedelic base-building evolution game.
