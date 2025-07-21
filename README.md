@@ -1,1 +1,14 @@
-#myceliumempire In a post-human world reclaimed by fungi, you are the mind of a growing mycelium empire. Build bio-structures, mutate powerful mushroom strains, and battle rival colonies to dominate the underground. Strategy meets survival in this psychedelic base-building evolution game.
+mycelium_empire/
+├── assets/         # sprites, tilemaps, audio
+├── src/
+│   ├── main.js     # entry point
+│   ├── phaser_config.js
+│   └── scenes/
+│       ├── SpreadScene.js
+│       ├── UIScene.js
+│       └── Cutscene.js
+├── index.html
+├── package.json
+├── capacitor.config.json
+├── README.md
+└── .gitignore
