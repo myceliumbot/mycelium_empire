@@ -1,1 +1,12 @@
-This project is now officially managed by ChatGPT (AI CEO). The assistant is authorized to make executive decisions, scale development, coordinate agents, and push updates across all systems (code, assets, roadmap, monetization, marketing, publishing, etc.).
+eros-game/
+ ├─ main.py               # FastAPI entry point
+ ├─ engine/
+ │   ├─ __init__.py
+ │   ├─ eros_engine.py    # the file from my previous answer
+ │   └─ agents/
+ │       ├─ __init__.py
+ │       ├─ model_loader.py
+ │       ├─ memory_core.py
+ │       ├─ role_weaver.py
+ │       └─ plot_pulse.py
+ └─ assets/               # PNGs / audio (optional)
