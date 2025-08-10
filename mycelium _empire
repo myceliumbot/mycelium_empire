@@ -1,0 +1,88 @@
+README.md// MYCELIUM EMPIRE PROTOTYPE CORE LOOP
+// Version: Phase 2 — Built for Web/Mobile Game
+// Send to GitHub Copilot or embed in Construct 3 logic
+
+// === GLOBAL STATE ===
+let spores = 0;
+let energy = 100;
+let evolutionLevel = 0;
+let baseFungus = { x: 250, y: 250 };
+let sporeClouds = [];
+let enemies = [];
+
+// === MAIN GAME LOOP ===
+function gameLoop() {
+  updateSporeGrowth();
+  updateEnemies();
+  checkEvolution();
+  renderHUD();
+  requestAnimationFrame(gameLoop);
+}
+
+// === PLAYER INTERACTION ===
+canvas.addEventListener("click", function (e) {
+  if (energy >= 5) {
+    spores += 1;
+    energy -= 5;
+    spawnSporeCloud(e.x, e.y);
+  }
+});
+
+// === GROWTH MECHANIC ===
+function updateSporeGrowth() {
+  sporeClouds.forEach((cloud, i) => {
+    cloud.radius += 1;
+    if (cloud.radius > 100) sporeClouds.splice(i, 1);
+    infectNearbyObjects(cloud);
+  });
+}
+
+function spawnSporeCloud(x, y) {
+  sporeClouds.push({ x, y, radius: 10 });
+  console.log("Spore cloud released at", x, y);
+}
+
+// === EVOLUTION LOGIC ===
+function checkEvolution() {
+  if (spores >= 10 && evolutionLevel === 0) {
+    evolutionLevel = 1;
+    console.log("Unlocked: Spore Multiplier!");
+  }
+  // TODO: Add more evolution tiers
+}
+
+// === ENEMY PLACEHOLDER ===
+function updateEnemies() {
+  enemies.forEach((enemy) => {
+    enemy.x += (baseFungus.x - enemy.x) * 0.01;
+    enemy.y += (baseFungus.y - enemy.y) * 0.01;
+  });
+}
+
+// === RENDER HUD ===
+function renderHUD() {
+  hud.innerHTML = `
+    <div>🌱 Spores: ${spores}</div>
+    <div>⚡ Energy: ${energy}</div>
+    <div>🧬 Evolution: ${evolutionLevel}</div>
+  `;
+}
+
+// === INFECT LOGIC ===
+function infectNearbyObjects(cloud) {
+  // Placeholder: Logs, plants, humans (later)
+  // Copilot: Add interaction with terrain/structures here
+}
+
+// === START GAME ===
+document.addEventListener("DOMContentLoaded", () => {
+  gameLoop();
+  console.log("Mycelium Empire started");
+});
+
+// === AGENT MARKERS ===
+// ART_AGENT: Add animated sprites and tilemap
+// DEV_AGENT: Add resource timers, base upgrades
+// MONETIZATION_AGENT: Insert reward ads + IAP hooks
+// NARRATIVE_AGENT: Trigger cutscenes, fungal lore
+// MARKETING_AGENT: Add viral share buttons
