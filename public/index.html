@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crypto Empire - Build Your Mining Empire!</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen active">
+        <div class="loading-content">
+            <h1 class="game-title glitch" data-text="CRYPTO EMPIRE">CRYPTO EMPIRE</h1>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p class="loading-text">Mining blockchain data...</p>
+        </div>
+    </div>
+
+    <!-- Main Game Screen -->
+    <div id="game-screen" class="screen">
+        <!-- Header with currencies -->
+        <header class="game-header">
+            <div class="currency-display">
+                <div class="coin-counter">
+                    <span class="coin-icon">₿</span>
+                    <span id="coin-count">0</span>
+                </div>
+                <div class="per-second">
+                    <span id="coins-per-second">0</span> ₿/s
+                </div>
+            </div>
+            <div class="premium-currency">
+                <span class="gem-icon">💎</span>
+                <span id="gem-count">100</span>
+                <button class="buy-gems-btn pulse">+</button>
+            </div>
+        </header>
+
+        <!-- Main Mining Area -->
+        <div class="main-content">
+            <div class="mining-area">
+                <div class="bitcoin-container">
+                    <div id="main-bitcoin" class="bitcoin-button">
+                        <div class="bitcoin-inner">
+                            <svg viewBox="0 0 100 100" class="bitcoin-svg">
+                                <circle cx="50" cy="50" r="45" fill="#f7931a"/>
+                                <text x="50" y="65" font-size="45" fill="white" text-anchor="middle" font-weight="bold">₿</text>
+                            </svg>
+                        </div>
+                        <div class="click-particles"></div>
+                    </div>
+                    <div class="mining-status">
+                        <p>TAP TO MINE</p>
+                        <p class="click-power">+<span id="click-value">1</span> per tap</p>
+                    </div>
+                </div>
+
+                <!-- Floating numbers container -->
+                <div id="floating-numbers"></div>
+            </div>
+
+            <!-- Miners Section -->
+            <div class="miners-section">
+                <h2 class="section-title">⛏️ Mining Rigs</h2>
+                <div class="miners-grid">
+                    <div class="miner-card" data-miner="basic">
+                        <div class="miner-icon">🖥️</div>
+                        <h3>Basic Miner</h3>
+                        <p class="miner-production">+1 ₿/s</p>
+                        <p class="miner-owned">Owned: <span id="basic-count">0</span></p>
+                        <button class="buy-btn" data-cost="10">
+                            <span class="cost-icon">₿</span>
+                            <span class="cost-amount">10</span>
+                        </button>
+                    </div>
+
+                    <div class="miner-card" data-miner="advanced">
+                        <div class="miner-icon">🎮</div>
+                        <h3>GPU Rig</h3>
+                        <p class="miner-production">+10 ₿/s</p>
+                        <p class="miner-owned">Owned: <span id="advanced-count">0</span></p>
+                        <button class="buy-btn" data-cost="100">
+                            <span class="cost-icon">₿</span>
+                            <span class="cost-amount">100</span>
+                        </button>
+                    </div>
+
+                    <div class="miner-card" data-miner="quantum">
+                        <div class="miner-icon">🔮</div>
+                        <h3>Quantum Computer</h3>
+                        <p class="miner-production">+100 ₿/s</p>
+                        <p class="miner-owned">Owned: <span id="quantum-count">0</span></p>
+                        <button class="buy-btn" data-cost="1000">
+                            <span class="cost-icon">₿</span>
+                            <span class="cost-amount">1000</span>
+                        </button>
+                    </div>
+
+                    <div class="miner-card locked" data-miner="alien">
+                        <div class="miner-icon">👽</div>
+                        <h3>Alien Tech</h3>
+                        <p class="miner-production">+1000 ₿/s</p>
+                        <p class="miner-owned">Owned: <span id="alien-count">0</span></p>
+                        <button class="buy-btn" data-cost="10000">
+                            <span class="cost-icon">₿</span>
+                            <span class="cost-amount">10000</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upgrades Section -->
+            <div class="upgrades-section">
+                <h2 class="section-title">🚀 Power Ups</h2>
+                <div class="upgrades-grid">
+                    <div class="upgrade-card" data-upgrade="clickPower">
+                        <div class="upgrade-icon">👆</div>
+                        <h3>Tap Power</h3>
+                        <p>2x tap earnings</p>
+                        <button class="upgrade-btn" data-cost="50">
+                            <span class="cost-icon">₿</span>
+                            <span class="cost-amount">50</span>
+                        </button>
+                    </div>
+
+                    <div class="upgrade-card" data-upgrade="autoClick">
+                        <div class="upgrade-icon">🤖</div>
+                        <h3>Auto Miner</h3>
+                        <p>Auto-tap every second</p>
+                        <button class="upgrade-btn" data-cost="500">
+                            <span class="cost-icon">₿</span>
+                            <span class="cost-amount">500</span>
+                        </button>
+                    </div>
+
+                    <div class="upgrade-card premium" data-upgrade="timeWarp">
+                        <div class="upgrade-icon">⏰</div>
+                        <h3>Time Warp</h3>
+                        <p>Get 1 hour of production</p>
+                        <button class="upgrade-btn premium-btn">
+                            <span class="cost-icon">💎</span>
+                            <span class="cost-amount">50</span>
+                        </button>
+                    </div>
+
+                    <div class="upgrade-card premium" data-upgrade="doubleProduction">
+                        <div class="upgrade-icon">×2</div>
+                        <h3>2X Boost</h3>
+                        <p>Double production for 10min</p>
+                        <button class="upgrade-btn premium-btn">
+                            <span class="cost-icon">💎</span>
+                            <span class="cost-amount">25</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-tab="mine">
+                <span class="nav-icon">⛏️</span>
+                <span>Mine</span>
+            </button>
+            <button class="nav-btn" data-tab="prestige">
+                <span class="nav-icon">🌟</span>
+                <span>Prestige</span>
+                <span class="notification-badge" id="prestige-available" style="display: none;">!</span>
+            </button>
+            <button class="nav-btn" data-tab="achievements">
+                <span class="nav-icon">🏆</span>
+                <span>Achievements</span>
+                <span class="notification-badge" id="achievement-badge" style="display: none;">3</span>
+            </button>
+            <button class="nav-btn" data-tab="leaderboard">
+                <span class="nav-icon">📊</span>
+                <span>Leaderboard</span>
+            </button>
+            <button class="nav-btn" data-tab="daily">
+                <span class="nav-icon">🎁</span>
+                <span>Daily</span>
+                <span class="notification-badge" id="daily-available">!</span>
+            </button>
+        </nav>
+
+        <!-- Prestige Modal -->
+        <div id="prestige-modal" class="modal">
+            <div class="modal-content">
+                <h2>🌟 PRESTIGE 🌟</h2>
+                <p class="prestige-description">
+                    Reset your progress to gain powerful permanent bonuses!
+                </p>
+                <div class="prestige-stats">
+                    <p>Current Prestige Level: <span id="prestige-level">0</span></p>
+                    <p>Prestige Points Available: <span id="prestige-points">0</span></p>
+                    <p>Current Multiplier: <span id="prestige-multiplier">1.0x</span></p>
+                </div>
+                <div class="prestige-reward">
+                    <p>After prestige you will gain:</p>
+                    <p class="reward-amount">+<span id="prestige-reward">0</span> Prestige Points</p>
+                    <p class="reward-multiplier">New Multiplier: <span id="new-multiplier">1.0x</span></p>
+                </div>
+                <div class="modal-buttons">
+                    <button class="prestige-btn" id="prestige-confirm">PRESTIGE NOW</button>
+                    <button class="cancel-btn modal-close">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Modal -->
+        <div id="achievements-modal" class="modal">
+            <div class="modal-content">
+                <h2>🏆 Achievements</h2>
+                <div class="achievements-grid">
+                    <div class="achievement unlocked">
+                        <div class="achievement-icon">🎯</div>
+                        <h3>First Click</h3>
+                        <p>Mine your first Bitcoin</p>
+                        <div class="achievement-reward">+10 💎</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">💰</div>
+                        <h3>Millionaire</h3>
+                        <p>Accumulate 1,000,000 ₿</p>
+                        <div class="achievement-reward">+100 💎</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">🏭</div>
+                        <h3>Factory Owner</h3>
+                        <p>Own 100 miners</p>
+                        <div class="achievement-reward">+50 💎</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">⚡</div>
+                        <h3>Speed Demon</h3>
+                        <p>Reach 10,000 ₿/s</p>
+                        <div class="achievement-reward">+200 💎</div>
+                    </div>
+                </div>
+                <button class="modal-close">Close</button>
+            </div>
+        </div>
+
+        <!-- Leaderboard Modal -->
+        <div id="leaderboard-modal" class="modal">
+            <div class="modal-content">
+                <h2>📊 Global Leaderboard</h2>
+                <div class="leaderboard-list">
+                    <div class="leaderboard-item">
+                        <span class="rank">1</span>
+                        <span class="player-name">CryptoKing</span>
+                        <span class="player-score">999.9M ₿</span>
+                    </div>
+                    <div class="leaderboard-item">
+                        <span class="rank">2</span>
+                        <span class="player-name">MiningMaster</span>
+                        <span class="player-score">750.2M ₿</span>
+                    </div>
+                    <div class="leaderboard-item current-player">
+                        <span class="rank">156</span>
+                        <span class="player-name">You</span>
+                        <span class="player-score">0 ₿</span>
+                    </div>
+                </div>
+                <button class="modal-close">Close</button>
+            </div>
+        </div>
+
+        <!-- Daily Rewards Modal -->
+        <div id="daily-modal" class="modal">
+            <div class="modal-content">
+                <h2>🎁 Daily Rewards</h2>
+                <p class="daily-streak">Current Streak: <span id="streak-count">0</span> days</p>
+                <div class="daily-rewards-grid">
+                    <div class="daily-reward claimed" data-day="1">
+                        <div class="reward-day">Day 1</div>
+                        <div class="reward-icon">₿</div>
+                        <div class="reward-amount">100</div>
+                    </div>
+                    <div class="daily-reward available" data-day="2">
+                        <div class="reward-day">Day 2</div>
+                        <div class="reward-icon">₿</div>
+                        <div class="reward-amount">250</div>
+                    </div>
+                    <div class="daily-reward" data-day="3">
+                        <div class="reward-day">Day 3</div>
+                        <div class="reward-icon">💎</div>
+                        <div class="reward-amount">10</div>
+                    </div>
+                    <div class="daily-reward" data-day="4">
+                        <div class="reward-day">Day 4</div>
+                        <div class="reward-icon">₿</div>
+                        <div class="reward-amount">500</div>
+                    </div>
+                    <div class="daily-reward" data-day="5">
+                        <div class="reward-day">Day 5</div>
+                        <div class="reward-icon">💎</div>
+                        <div class="reward-amount">25</div>
+                    </div>
+                    <div class="daily-reward mega" data-day="7">
+                        <div class="reward-day">Day 7</div>
+                        <div class="reward-icon">🎁</div>
+                        <div class="reward-amount">MEGA</div>
+                    </div>
+                </div>
+                <button class="claim-daily-btn" id="claim-daily">CLAIM REWARD</button>
+                <button class="modal-close">Close</button>
+            </div>
+        </div>
+
+        <!-- Shop Modal -->
+        <div id="shop-modal" class="modal">
+            <div class="modal-content">
+                <h2>💎 Premium Shop</h2>
+                <div class="shop-items">
+                    <div class="shop-item">
+                        <h3>Starter Pack</h3>
+                        <p>100 💎 + 10,000 ₿</p>
+                        <button class="buy-iap-btn" data-product="starter">$0.99</button>
+                    </div>
+                    <div class="shop-item popular">
+                        <div class="popular-badge">BEST VALUE</div>
+                        <h3>Mega Bundle</h3>
+                        <p>1,000 💎 + 1M ₿</p>
+                        <button class="buy-iap-btn" data-product="mega">$4.99</button>
+                    </div>
+                    <div class="shop-item">
+                        <h3>Whale Pack</h3>
+                        <p>10,000 💎 + 100M ₿</p>
+                        <button class="buy-iap-btn" data-product="whale">$19.99</button>
+                    </div>
+                    <div class="shop-item vip">
+                        <h3>VIP Status</h3>
+                        <p>2x earnings forever + No ads</p>
+                        <button class="buy-iap-btn" data-product="vip">$9.99</button>
+                    </div>
+                </div>
+                <button class="modal-close">Close</button>
+            </div>
+        </div>
+
+        <!-- Offline Earnings Modal -->
+        <div id="offline-modal" class="modal">
+            <div class="modal-content">
+                <h2>💰 Offline Earnings</h2>
+                <p>While you were away, your miners earned:</p>
+                <div class="offline-earnings">
+                    <span class="earnings-amount">₿ <span id="offline-amount">0</span></span>
+                </div>
+                <button class="collect-btn" id="collect-offline">COLLECT</button>
+                <p class="double-offer">Watch an ad to DOUBLE your earnings!</p>
+                <button class="watch-ad-btn" id="watch-ad-offline">📺 WATCH AD (2X)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound toggle -->
+    <button id="sound-toggle" class="sound-btn">🔊</button>
+
+    <script src="game.js"></script>
+</body>
+</html>
