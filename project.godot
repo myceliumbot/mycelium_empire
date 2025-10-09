@@ -15,6 +15,17 @@ run/main_scene="res://basic_world.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameManager="*res://scripts/GameManager.gd"
+MonetizationManager="*res://scripts/MonetizationManager.gd"
+UIManager="*res://scripts/UIManager.gd"
+SocialManager="*res://scripts/SocialManager.gd"
+ContentGenerator="*res://scripts/ContentGenerator.gd"
+AnalyticsManager="*res://scripts/AnalyticsManager.gd"
+LiveServiceManager="*res://scripts/LiveServiceManager.gd"
+MarketingManager="*res://scripts/MarketingManager.gd"
+
 [display]
 
 window/size/viewport_width=1280
